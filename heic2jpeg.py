@@ -7,7 +7,7 @@ def convert_rational_to_decimal(rational_latlon):
     ((deg_nmr, deg_dnm), (min_nmr, min_dnm), (sec_nmr, sec_dnm)) = rational_latlon
     return deg_nmr / deg_dnm + min_nmr / min_dnm / 60 + sec_nmr / sec_dnm / 3600
 
-def resize_and_convert_image(input_dir, output_dir, size=(1280, 720)):
+def resize_and_convert_image(input_dir, output_dir, size_ratio):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
@@ -20,7 +20,8 @@ def resize_and_convert_image(input_dir, output_dir, size=(1280, 720)):
 
             # 画像を開き、リサイズする
             image = Image.open(input_path)
-            image = image.resize(size)
+            image_size_resized = (int(image.width * size_ratio), int(image.height * size_ratio))
+            image = image.resize(image_size_resized)
 
             # EXIFデータをコピーする
             exif_data = piexif.load(image.info['exif'])
@@ -47,6 +48,6 @@ def resize_and_convert_image(input_dir, output_dir, size=(1280, 720)):
 # フォルダパスとサイズを指定
 input_dir = r'D:\OneDrive - nagaokaut.ac.jp\01_Research\01_Field Survey\06_202401_Noto\01_2024-01-02_04_第1回調査\2024-01-02\image_shiga_resize'
 output_dir = r"D:\OneDrive - nagaokaut.ac.jp\01_Research\01_Field Survey\06_202401_Noto\01_2024-01-02_04_第1回調査\2024-01-02\image_shiga_resize_2"
-size = (1280, 720)  # 例えば1280x720にリサイズ
+size_ratio = 0.5  # 例えば1280x720にリサイズ
 
-resize_and_convert_image(input_dir, output_dir, size)
+resize_and_convert_image(input_dir, output_dir, size_ratio)
