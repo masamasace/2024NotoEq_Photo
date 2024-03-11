@@ -43,7 +43,7 @@
             complete: function(results) {
                 results.data.forEach(function(photo) {
                     var marker = L.marker([photo.latitude, photo.longitude]).addTo(map)
-                        .bindPopup(`<b>${photo.comment}</b><br><img src="image/${photo.filename}" width="100"><br><a href="https://www.google.com/maps?q=${photo.latitude},${photo.longitude}" target="_blank">Google Mapへのリンク</a>`);
+                        .bindPopup(`<b>${photo.comment}</b><br><img src="image/${photo.filename}" width="200"><br>緯度経度：${photo.latitude.slice(0, 9)}, ${photo.longitude.slice(0, 10)}<br><a href="https://www.google.com/maps?q=${photo.latitude},${photo.longitude}" target="_blank">Google Mapへのリンク</a>`);
                 });
             }
         });
