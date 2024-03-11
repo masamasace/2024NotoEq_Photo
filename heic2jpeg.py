@@ -7,20 +7,24 @@ def convert_rational_to_decimal(rational_latlon):
     ((deg_nmr, deg_dnm), (min_nmr, min_dnm), (sec_nmr, sec_dnm)) = rational_latlon
     return deg_nmr / deg_dnm + min_nmr / min_dnm / 60 + sec_nmr / sec_dnm / 3600
 
-def resize_and_convert_image(input_dir, output_dir, size_ratio):
+def resize_and_convert_image(input_dir, output_dir, max_axis_pixel):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
     metadata_list = []
     for filename in os.listdir(input_dir):
-        if filename.lower().endswith(".jpg"):
+        if filename.lower().endswith(".jpg") or filename.lower().endswith(".JPG"):
             input_path = os.path.join(input_dir, filename)
             output_filename = os.path.splitext(filename)[0] + '.jpg'
             output_path = os.path.join(output_dir, output_filename)
 
             # 画像を開き、リサイズする
             image = Image.open(input_path)
-            image_size_resized = (int(image.width * size_ratio), int(image.height * size_ratio))
+            if image.width < image.height:
+                image_size_resized = (int(max_axis_pixel * image.width / image.height), max_axis_pixel)
+            else:
+                image_size_resized = (max_axis_pixel, int(max_axis_pixel * image.height / image.width))
+                
             image = image.resize(image_size_resized)
 
             # EXIFデータをコピーする
@@ -39,6 +43,8 @@ def resize_and_convert_image(input_dir, output_dir, size_ratio):
                 "longitude": longitude,
                 "comment": filename
             })
+            
+            print(output_filename + "...Done!")
 
     # CSVファイルを作成
     metadata_df = pd.DataFrame(metadata_list)
@@ -46,8 +52,8 @@ def resize_and_convert_image(input_dir, output_dir, size_ratio):
 
 
 # フォルダパスとサイズを指定
-input_dir = r'D:\OneDrive - nagaokaut.ac.jp\01_Research\01_Field Survey\06_202401_Noto\01_2024-01-02_04_第1回調査\2024-01-02\image_shiga_resize'
-output_dir = r"D:\OneDrive - nagaokaut.ac.jp\01_Research\01_Field Survey\06_202401_Noto\01_2024-01-02_04_第1回調査\2024-01-02\image_shiga_resize_2"
-size_ratio = 0.5  # 例えば1280x720にリサイズ
+input_dir = r'D:\OneDrive - nagaokaut.ac.jp\01_Research\01_Field Survey\06_202401_Noto\01_2024-01-02_04_第1回調査\2024-01-02\image_resize'
+output_dir = r"D:\OneDrive - nagaokaut.ac.jp\01_Research\01_Field Survey\06_202401_Noto\01_2024-01-02_04_第1回調査\2024-01-02\image_resize_2"
+max_axis_pixel = 1200  # 例えば1280x720にリサイズ
 
-resize_and_convert_image(input_dir, output_dir, size_ratio)
+resize_and_convert_image(input_dir, output_dir, max_axis_pixel)
