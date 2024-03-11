@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Photo Map</title>
+    <title>2024年能登半島地震 調査画像共有マップ</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -20,7 +20,7 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        Papa.parse("photos.csv", {
+        Papa.parse("photos_metadata.csv", {
             download: true,
             header: true,
             complete: function(results) {
